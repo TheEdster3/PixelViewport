@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>PixelViewport.OpenCvSharp</RootNamespace>
+    <AssemblyName>PixelViewport.OpenCvSharp</AssemblyName>
+
+    <IsPackable>true</IsPackable>
+    <PackageId>PixelViewport.OpenCvSharp</PackageId>
+    <Version>0.2.0-alpha.1</Version>
+    <Authors>PixelViewport contributors</Authors>
+    <Description>Explicit-lifetime OpenCvSharp Mat adapters for PixelViewport image frames.</Description>
+    <PackageTags>opencv;opencvsharp;image;machine-vision;scientific;frame</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/OWNER/PixelViewport</RepositoryUrl>
+    <PackageProjectUrl>https://OWNER.github.io/PixelViewport/</PackageProjectUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OpenCvSharp4" />
+    <ProjectReference Include="..\PixelViewport.Imaging\PixelViewport.Imaging.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+</Project>

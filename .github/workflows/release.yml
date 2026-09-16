@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    env:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Resolve version
+        id: version
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}".TrimStart('v')
+          "value=$version" >> $env:GITHUB_OUTPUT
+      - name: Restore
+        run: dotnet restore PixelViewport.sln
+      - name: Build libraries, samples, and tools
+        run: dotnet build PixelViewport.sln -c Release --no-restore -p:Version=${{ steps.version.outputs.value }}
+      - name: Test viewport math
+        run: dotnet test tests/PixelViewport.Core.Tests/PixelViewport.Core.Tests.csproj -c Release --no-build
+      - name: Test frame pipeline
+        run: dotnet test tests/PixelViewport.Imaging.Tests/PixelViewport.Imaging.Tests.csproj -c Release --no-build
+      - name: Test OpenCvSharp adapter
+        run: dotnet test tests/PixelViewport.OpenCvSharp.Tests/PixelViewport.OpenCvSharp.Tests.csproj -c Release --no-build
+      - name: Test Avalonia interactions headlessly
+        run: dotnet run --project tests/PixelViewport.Avalonia.Tests/PixelViewport.Avalonia.Tests.csproj -c Release --no-build
+      - name: Pack Core
+        run: dotnet pack src/PixelViewport.Core/PixelViewport.Core.csproj -c Release --no-build -o artifacts/packages -p:Version=${{ steps.version.outputs.value }}
+      - name: Pack Imaging
+        run: dotnet pack src/PixelViewport.Imaging/PixelViewport.Imaging.csproj -c Release --no-build -o artifacts/packages -p:Version=${{ steps.version.outputs.value }}
+      - name: Pack OpenCvSharp adapter
+        run: dotnet pack src/PixelViewport.OpenCvSharp/PixelViewport.OpenCvSharp.csproj -c Release --no-build -o artifacts/packages -p:Version=${{ steps.version.outputs.value }}
+      - name: Pack WinUI
+        run: dotnet pack src/PixelViewport.WinUI/PixelViewport.WinUI.csproj -c Release --no-build -o artifacts/packages -p:Version=${{ steps.version.outputs.value }}
+      - name: Pack Avalonia
+        run: dotnet pack src/PixelViewport.Avalonia/PixelViewport.Avalonia.csproj -c Release --no-build -o artifacts/packages -p:Version=${{ steps.version.outputs.value }}
+      - name: Publish to NuGet
+        if: ${{ env.NUGET_API_KEY != '' }}
+        shell: pwsh
+        run: |
+          Get-ChildItem artifacts/packages/*.nupkg |
+            Where-Object { $_.Name -notlike '*.symbols.nupkg' } |
+            ForEach-Object {
+              dotnet nuget push $_.FullName --api-key "$env:NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
+            }
+      - uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            artifacts/packages/*.nupkg
+            artifacts/packages/*.snupkg

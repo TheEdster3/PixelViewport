@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>PixelViewport.Imaging</RootNamespace>
+    <AssemblyName>PixelViewport.Imaging</AssemblyName>
+
+    <IsPackable>true</IsPackable>
+    <PackageId>PixelViewport.Imaging</PackageId>
+    <Version>0.2.0-alpha.1</Version>
+    <Authors>PixelViewport contributors</Authors>
+    <Description>Framework-neutral image-frame contracts, pixel conversion, inspection, and bounded live-frame delivery for PixelViewport.</Description>
+    <PackageTags>image;machine-vision;scientific;pixel;frame;streaming</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/OWNER/PixelViewport</RepositoryUrl>
+    <PackageProjectUrl>https://OWNER.github.io/PixelViewport/</PackageProjectUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PixelViewport.Core\PixelViewport.Core.csproj" />
+  </ItemGroup>
+</Project>

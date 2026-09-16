@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
+    <RootNamespace>PixelViewport.WinUI</RootNamespace>
+    <AssemblyName>PixelViewport.WinUI</AssemblyName>
+    <UseWinUI>true</UseWinUI>
+
+    <IsPackable>true</IsPackable>
+    <PackageId>PixelViewport.WinUI</PackageId>
+    <Version>0.2.0-alpha.1</Version>
+    <Authors>PixelViewport contributors</Authors>
+    <Description>A precise zoomable and pannable image viewport control for WinUI 3.</Description>
+    <PackageTags>winui;winui3;image;viewer;zoom;pan;imaging;windowsappsdk</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/OWNER/PixelViewport</RepositoryUrl>
+    <PackageProjectUrl>https://OWNER.github.io/PixelViewport/</PackageProjectUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PixelViewport.Core\PixelViewport.Core.csproj" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+</Project>

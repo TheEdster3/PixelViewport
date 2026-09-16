@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>PixelViewport.Avalonia</RootNamespace>
+    <AssemblyName>PixelViewport.Avalonia</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+    <IsPackable>true</IsPackable>
+    <PackageId>PixelViewport.Avalonia</PackageId>
+    <Version>0.2.0-alpha.1</Version>
+    <Authors>PixelViewport contributors</Authors>
+    <Description>A cross-platform Avalonia image viewport and evaluation adapter for PixelViewport.</Description>
+    <PackageTags>avalonia;image;machine-vision;scientific;zoom;pan</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/OWNER/PixelViewport</RepositoryUrl>
+    <PackageProjectUrl>https://OWNER.github.io/PixelViewport/</PackageProjectUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" />
+    <ProjectReference Include="..\PixelViewport.Core\PixelViewport.Core.csproj" />
+    <ProjectReference Include="..\PixelViewport.Imaging\PixelViewport.Imaging.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>PixelViewport.Core</RootNamespace>
+    <AssemblyName>PixelViewport.Core</AssemblyName>
+
+    <IsPackable>true</IsPackable>
+    <PackageId>PixelViewport.Core</PackageId>
+    <Version>0.2.0-alpha.1</Version>
+    <Authors>PixelViewport contributors</Authors>
+    <Description>Framework-neutral viewport geometry and transform math used by PixelViewport.</Description>
+    <PackageTags>image;viewer;zoom;pan;viewport;geometry</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/OWNER/PixelViewport</RepositoryUrl>
+    <PackageProjectUrl>https://OWNER.github.io/PixelViewport/</PackageProjectUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,28 @@
+name: Bug report
+description: Report a reproducible PixelViewport problem
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Include the smallest XAML/C# sample that reproduces the problem.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: PixelViewport version
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows / Windows App SDK version

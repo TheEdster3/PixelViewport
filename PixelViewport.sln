@@ -1,0 +1,102 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelViewport.Core", "src\PixelViewport.Core\PixelViewport.Core.csproj", "{D4D7A1F0-3DD5-4D8D-AEB0-1E81BDE1B201}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelViewport.WinUI", "src\PixelViewport.WinUI\PixelViewport.WinUI.csproj", "{D25E728E-D36E-449D-8793-88A81AE176F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelViewport.Sample", "samples\PixelViewport.Sample\PixelViewport.Sample.csproj", "{9BF29F6A-4973-4450-963E-1CF4C55A819E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelViewport.Core.Tests", "tests\PixelViewport.Core.Tests\PixelViewport.Core.Tests.csproj", "{3CD8BA93-9BFB-452F-B51B-0583D4FDE33C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AB6D8F5A-3609-4D84-A443-296F46A830F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelViewport.Imaging", "src\PixelViewport.Imaging\PixelViewport.Imaging.csproj", "{07CA81D8-98AD-484E-B49B-E987378AF467}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelViewport.Avalonia", "src\PixelViewport.Avalonia\PixelViewport.Avalonia.csproj", "{B50F71A6-384C-4650-BA1D-DC69295F0484}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C679B50A-6F58-4501-87B7-C222BAD4095E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelViewport.Imaging.Tests", "tests\PixelViewport.Imaging.Tests\PixelViewport.Imaging.Tests.csproj", "{D94EBC7B-519E-4546-A66F-19C2CBC6CEA8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{292B0FCC-2741-46CC-B6EE-8E35B2AB915A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelViewport.VisionDemo", "samples\PixelViewport.VisionDemo\PixelViewport.VisionDemo.csproj", "{BF400ECB-B5A6-4C12-9405-15392067191C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{7C71D2D2-29D3-4222-9D10-568278665243}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelViewport.Benchmarks", "tools\PixelViewport.Benchmarks\PixelViewport.Benchmarks.csproj", "{1FABE8F1-7895-4D5D-BE88-18FF5093F9CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelViewport.OpenCvSharp", "src\PixelViewport.OpenCvSharp\PixelViewport.OpenCvSharp.csproj", "{913576EB-3D89-4F55-8466-52A03E25A96B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelViewport.OpenCvSharp.Tests", "tests\PixelViewport.OpenCvSharp.Tests\PixelViewport.OpenCvSharp.Tests.csproj", "{5A9B8189-4DA4-4E72-B8F9-D77A574AA121}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelViewport.Avalonia.Tests", "tests\PixelViewport.Avalonia.Tests\PixelViewport.Avalonia.Tests.csproj", "{F3CD633B-1EC7-4CB6-A4A6-045A6E2472FF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D4D7A1F0-3DD5-4D8D-AEB0-1E81BDE1B201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4D7A1F0-3DD5-4D8D-AEB0-1E81BDE1B201}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4D7A1F0-3DD5-4D8D-AEB0-1E81BDE1B201}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4D7A1F0-3DD5-4D8D-AEB0-1E81BDE1B201}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D25E728E-D36E-449D-8793-88A81AE176F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D25E728E-D36E-449D-8793-88A81AE176F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D25E728E-D36E-449D-8793-88A81AE176F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D25E728E-D36E-449D-8793-88A81AE176F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BF29F6A-4973-4450-963E-1CF4C55A819E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BF29F6A-4973-4450-963E-1CF4C55A819E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BF29F6A-4973-4450-963E-1CF4C55A819E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BF29F6A-4973-4450-963E-1CF4C55A819E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CD8BA93-9BFB-452F-B51B-0583D4FDE33C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CD8BA93-9BFB-452F-B51B-0583D4FDE33C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CD8BA93-9BFB-452F-B51B-0583D4FDE33C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CD8BA93-9BFB-452F-B51B-0583D4FDE33C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07CA81D8-98AD-484E-B49B-E987378AF467}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07CA81D8-98AD-484E-B49B-E987378AF467}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07CA81D8-98AD-484E-B49B-E987378AF467}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07CA81D8-98AD-484E-B49B-E987378AF467}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B50F71A6-384C-4650-BA1D-DC69295F0484}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B50F71A6-384C-4650-BA1D-DC69295F0484}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B50F71A6-384C-4650-BA1D-DC69295F0484}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B50F71A6-384C-4650-BA1D-DC69295F0484}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D94EBC7B-519E-4546-A66F-19C2CBC6CEA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D94EBC7B-519E-4546-A66F-19C2CBC6CEA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D94EBC7B-519E-4546-A66F-19C2CBC6CEA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D94EBC7B-519E-4546-A66F-19C2CBC6CEA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF400ECB-B5A6-4C12-9405-15392067191C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF400ECB-B5A6-4C12-9405-15392067191C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF400ECB-B5A6-4C12-9405-15392067191C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF400ECB-B5A6-4C12-9405-15392067191C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FABE8F1-7895-4D5D-BE88-18FF5093F9CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FABE8F1-7895-4D5D-BE88-18FF5093F9CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FABE8F1-7895-4D5D-BE88-18FF5093F9CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FABE8F1-7895-4D5D-BE88-18FF5093F9CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{913576EB-3D89-4F55-8466-52A03E25A96B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{913576EB-3D89-4F55-8466-52A03E25A96B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{913576EB-3D89-4F55-8466-52A03E25A96B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{913576EB-3D89-4F55-8466-52A03E25A96B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A9B8189-4DA4-4E72-B8F9-D77A574AA121}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A9B8189-4DA4-4E72-B8F9-D77A574AA121}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A9B8189-4DA4-4E72-B8F9-D77A574AA121}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A9B8189-4DA4-4E72-B8F9-D77A574AA121}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3CD633B-1EC7-4CB6-A4A6-045A6E2472FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3CD633B-1EC7-4CB6-A4A6-045A6E2472FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3CD633B-1EC7-4CB6-A4A6-045A6E2472FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3CD633B-1EC7-4CB6-A4A6-045A6E2472FF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{07CA81D8-98AD-484E-B49B-E987378AF467} = {AB6D8F5A-3609-4D84-A443-296F46A830F6}
+		{B50F71A6-384C-4650-BA1D-DC69295F0484} = {AB6D8F5A-3609-4D84-A443-296F46A830F6}
+		{D94EBC7B-519E-4546-A66F-19C2CBC6CEA8} = {C679B50A-6F58-4501-87B7-C222BAD4095E}
+		{BF400ECB-B5A6-4C12-9405-15392067191C} = {292B0FCC-2741-46CC-B6EE-8E35B2AB915A}
+		{1FABE8F1-7895-4D5D-BE88-18FF5093F9CC} = {7C71D2D2-29D3-4222-9D10-568278665243}
+		{913576EB-3D89-4F55-8466-52A03E25A96B} = {AB6D8F5A-3609-4D84-A443-296F46A830F6}
+		{5A9B8189-4DA4-4E72-B8F9-D77A574AA121} = {C679B50A-6F58-4501-87B7-C222BAD4095E}
+		{F3CD633B-1EC7-4CB6-A4A6-045A6E2472FF} = {C679B50A-6F58-4501-87B7-C222BAD4095E}
+	EndGlobalSection
+EndGlobal

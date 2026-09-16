@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="A vendor-neutral .NET display and interaction layer for machine vision and scientific imaging." />
+  <title>PixelViewport Vision — from vision pipeline to operator</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="nav shell">
+    <a class="brand" href="#top" aria-label="PixelViewport home">PixelViewport Vision</a>
+    <nav>
+      <a href="#features">Foundation</a>
+      <a href="#pricing">Evaluation</a>
+      <a data-repo-link href="https://github.com/OWNER/PixelViewport">GitHub</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero shell">
+      <div class="hero-copy">
+        <p class="eyebrow">.NET • MACHINE VISION • SCIENTIFIC IMAGING</p>
+        <h1>From vision pipeline<br /><span>to operator.</span></h1>
+        <p class="lede">A vendor-neutral frame, display, and interaction layer for live and high-bit-depth industrial imaging—without binding your UI to one camera SDK.</p>
+        <div class="actions">
+          <a class="button primary" data-repo-link href="https://github.com/OWNER/PixelViewport">Explore Community</a>
+          <a class="button secondary" href="#quickstart">Inspect the contract</a>
+        </div>
+        <p class="compat">MIT foundation • .NET 8 • WinUI baseline • Avalonia evaluation path</p>
+      </div>
+
+      <div class="product-window" aria-label="PixelViewport Vision product preview">
+        <div class="window-bar"><i></i><i></i><i></i><span>line-07 / camera-a / frame-2048</span></div>
+        <div class="viewport-demo">
+          <div class="grid-lines"></div>
+          <div class="sample-object"></div>
+          <div class="roi"><span>SURFACE ANOMALY · 94%</span></div>
+          <div class="crosshair horizontal"></div>
+          <div class="crosshair vertical"></div>
+          <div class="readout">x 812&nbsp;&nbsp; y 496&nbsp;&nbsp; raw 41872&nbsp;&nbsp; 148%</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="proof-strip">
+      <div class="shell proof-grid">
+        <div><strong>Vendor-neutral frames</strong><span>Managed or native memory with explicit ownership.</span></div>
+        <div><strong>Bounded latency</strong><span>Latest-frame delivery drops stale work, not responsiveness.</span></div>
+        <div><strong>16-bit inspection</strong><span>Preserve raw intensity while choosing a display transform.</span></div>
+        <div><strong>Stable coordinates</strong><span>Keep overlays and tools in image space through zoom and pan.</span></div>
+      </div>
+    </section>
+
+    <section id="features" class="section shell">
+      <div class="section-heading">
+        <p class="eyebrow">THE UI BOUNDARY VISION SDKS LEAVE BEHIND</p>
+        <h2>One display contract.<br />Many acquisition stacks.</h2>
+      </div>
+      <div class="cards">
+        <article><span>01</span><h3>Explicit frame lifetime</h3><p>Wrap a camera-owned buffer with a lease or make a safe pooled copy. Replaced and displayed frames are disposed deterministically.</p></article>
+        <article><span>02</span><h3>Live-stream backpressure</h3><p>A single-slot mailbox ensures a busy UI presents the newest available frame rather than replaying an obsolete queue.</p></article>
+        <article><span>03</span><h3>Imaging-native interaction</h3><p>Cursor-centered zoom, constrained pan, raw pixel inspection, and image-coordinate overlays stay consistent across adapters.</p></article>
+        <article><span>04</span><h3>Measurable by design</h3><p>A reproducible CPU probe ships in the repository. Production claims wait for named hardware and real customer workloads.</p></article>
+      </div>
+    </section>
+
+    <section id="quickstart" class="section shell code-section">
+      <div>
+        <p class="eyebrow">A SMALL VENDOR-NEUTRAL CONTRACT</p>
+        <h2>Lease it. Submit it. Inspect it.</h2>
+        <p>The framework-neutral imaging package knows pixel layouts and lifetime, not your camera vendor. The evaluation adapter owns submitted frames and bounds pending work.</p>
+      </div>
+      <pre><code>using PixelViewport.Imaging;
+
+var frame = PixelFrame.Wrap(
+    cameraBuffer,
+    width, height, stride,
+    ImagePixelFormat.Gray16LittleEndian,
+    sequence, DateTimeOffset.UtcNow,
+    cameraBufferLease);
+
+viewport.SubmitFrame(frame);</code></pre>
+    </section>
+
+    <section id="pricing" class="section shell pricing-section">
+      <div class="section-heading">
+        <p class="eyebrow">VALIDATION OFFER</p>
+        <h2>Prototype freely.<br />Pay for production confidence.</h2>
+      </div>
+      <div class="pricing-grid">
+        <article class="price-card featured">
+          <p class="plan">Community</p><p class="price">$0</p><p class="term">MIT licensed</p>
+          <ul><li>Frame and geometry contracts</li><li>Six pixel formats</li><li>Bounded delivery</li><li>WinUI + Avalonia paths</li></ul>
+          <a class="button primary full" data-repo-link href="https://github.com/OWNER/PixelViewport">Evaluate the source</a>
+        </article>
+        <article class="price-card">
+          <p class="plan">Professional</p><p class="price">$999</p><p class="term">target / developer / year</p>
+          <ul><li>Measured production renderer</li><li>High-bit-depth display tools</li><li>Interactive ROI workflow</li><li>Source, updates, and support</li></ul>
+          <button class="button secondary full" disabled>Opens after validation</button>
+        </article>
+        <article class="price-card">
+          <p class="plan">Design Partner</p><p class="price">$2.5k</p><p class="term">four-week scoped pilot</p>
+          <ul><li>One real acquisition workload</li><li>Written success criteria</li><li>Direct engineering access</li><li>Fee credited to first license</li></ul>
+          <button class="button secondary full" data-contact disabled>Intake details coming soon</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="section shell final-cta">
+      <p class="eyebrow">PIXELVIEWPORT VISION 0.2 ALPHA</p>
+      <h2>Own the operator experience.<br /><span>Not another camera lock-in.</span></h2>
+      <a class="button primary" data-repo-link href="https://github.com/OWNER/PixelViewport">Run the live proof</a>
+    </section>
+  </main>
+
+  <footer class="shell footer">
+    <span>PixelViewport Vision</span><span>.NET industrial imaging UI foundation</span><span>© 2026</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
