@@ -10,7 +10,7 @@ sourceCanvas.width = width; sourceCanvas.height = height;
 const sourceContext = sourceCanvas.getContext('2d');
 const image = sourceContext.createImageData(width, height);
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-let paused = reducedMotion.matches, sequence = 0, mode = 'inspection', state = { zoom: 1, x: 0, y: 0 };
+let paused = reducedMotion.matches, sequence = 0, mode = 'gray16', state = { zoom: 1, x: 0, y: 0 };
 let pointer = null, drag = null, fitted = true, lastTick = 0, dirty = true;
 const sourceSelect = document.querySelector('#source');
 const overlays = document.querySelector('#overlays');
@@ -19,7 +19,10 @@ const pixelReadout = document.querySelector('#pixel-readout');
 const shell = canvas.parentElement;
 const visible = { hero: true, demo: true };
 const observer = new IntersectionObserver(entries => {
-  for (const entry of entries) visible[entry.target === hero ? 'hero' : 'demo'] = entry.isIntersecting;
+  for (const entry of entries) {
+    visible[entry.target === hero ? 'hero' : 'demo'] = entry.isIntersecting;
+    if (entry.isIntersecting) dirty = true;
+  }
 });
 observer.observe(hero); observer.observe(canvas);
 
@@ -51,7 +54,7 @@ function makeSource() {
   sourceContext.putImageData(image, 0, 0);
 }
 function drawOverlay(target, transform, frame = sequence) {
-  const rectangles = [{ x: (frame * 5) % (width - 180), y: 160 + Math.floor(70 * Math.sin(frame * .08)), w: 150, h: 110, color: '#ffc066', text: 'SURFACE ANOMALY' }, { x: 610, y: 310, w: 115, h: 85, color: '#5ae8bb', text: 'REFERENCE' }];
+  const rectangles = [{ x: (frame * 5) % (width - 180), y: 160 + Math.floor(70 * Math.sin(frame * .08)), w: 150, h: 110, color: '#ffc066', text: 'REGION 01' }, { x: 610, y: 310, w: 115, h: 85, color: '#a3f4bf', text: 'REFERENCE' }];
   for (const rect of rectangles) {
     const x = rect.x * transform.zoom + transform.x, y = rect.y * transform.zoom + transform.y;
     target.strokeStyle = rect.color; target.lineWidth = 1.5;
@@ -84,6 +87,8 @@ function render() {
   }
   document.querySelector('#zoom-readout').textContent = `ZOOM ${Math.round(state.zoom * 100)}%`;
   document.querySelector('#frame-readout').textContent = `FRAME ${sequence} · ${paused ? 'PAUSED' : 'SYNTHETIC'}`;
+  document.querySelector('#hero-format').textContent = `${mode === 'gray16' ? 'GRAY16' : 'BGRA32'} / 960 × 600`;
+  document.querySelector('.hero-caption p').textContent = `${mode === 'gray16' ? 'Synthetic 16-bit intensity data.' : 'Synthetic BGRA32 data with example overlays.'} Browser illustration, not the .NET renderer or a performance benchmark.`;
   inspect();
 }
 function point(event) { const rect = canvas.getBoundingClientRect(); return { x: event.clientX - rect.left, y: event.clientY - rect.top }; }
@@ -114,15 +119,38 @@ sourceSelect.addEventListener('change', () => { mode = sourceSelect.value; dirty
 overlays.addEventListener('change', render);
 new ResizeObserver(() => { if (fitted) setFit(); else { const size = bounds(); state = constrain(state, size.width, size.height, width, height); render(); } }).observe(shell);
 makeSource(); setFit(); updatePause();
+function renderHero() {
+  heroContext.clearRect(0, 0, width, height);
+  heroContext.drawImage(sourceCanvas, 0, 0);
+  if (mode === 'inspection') drawOverlay(heroContext, { zoom: 1, x: 0, y: 0 });
+
+  // A real sample and crop of the synthetic buffer, not a simulated SDK screenshot.
+  const x = 500, y = 280, value = sample(x, y);
+  heroContext.strokeStyle = '#a3f4bf'; heroContext.lineWidth = 1;
+  heroContext.setLineDash([5, 7]);
+  heroContext.beginPath(); heroContext.moveTo(x, 0); heroContext.lineTo(x, height);
+  heroContext.moveTo(0, y); heroContext.lineTo(width, y); heroContext.stroke();
+  heroContext.setLineDash([]);
+  heroContext.strokeRect(x - 8, y - 8, 16, 16);
+  heroContext.fillStyle = '#111f25ef'; heroContext.fillRect(24, 24, 335, 77);
+  heroContext.font = '19px Consolas, monospace'; heroContext.fillStyle = '#a3f4bf';
+  heroContext.fillText('X 500 / Y 280', 40, 54);
+  heroContext.fillStyle = '#edf5f6';
+  heroContext.fillText(mode === 'gray16' ? `RAW ${value.raw} / 65535` : `RGB ${value.r} / ${value.g} / ${value.b}`, 40, 82);
+  const detailX = width - 180, detailY = height - 198;
+  heroContext.fillStyle = '#111f25'; heroContext.fillRect(detailX - 8, detailY - 8, 160, 186);
+  heroContext.imageSmoothingEnabled = false;
+  heroContext.drawImage(sourceCanvas, x - 8, y - 8, 16, 16, detailX, detailY, 144, 144);
+  heroContext.strokeStyle = '#a3f4bf'; heroContext.strokeRect(detailX + 72, detailY + 72, 9, 9);
+  heroContext.fillStyle = '#b6c9d0'; heroContext.font = '17px Consolas, monospace';
+  heroContext.fillText('16 × 16 px', detailX + 8, detailY + 168);
+}
 function tick(time) {
   if (!document.hidden && (visible.hero || visible.demo) && (dirty || (!paused && time - lastTick >= 100))) {
     if (!paused && !dirty) sequence++;
     lastTick = time; makeSource(); dirty = false;
     if (visible.demo) render();
-    if (visible.hero) {
-      heroContext.clearRect(0, 0, width, height); heroContext.drawImage(sourceCanvas, 0, 0);
-      if (mode === 'inspection') drawOverlay(heroContext, { zoom: 1, x: 0, y: 0 });
-    }
+    if (visible.hero) renderHero();
   }
   requestAnimationFrame(tick);
 }
