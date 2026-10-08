@@ -19,7 +19,18 @@ The adapter intentionally pins OpenCvSharp 4.11.0.20250507. The newer 4.13 packa
 
 The adapter package does not select or bundle an operating-system runtime. Applications must reference the appropriate OpenCvSharp runtime package themselves. This avoids imposing Windows native binaries on cross-platform consumers and keeps deployment choice at the application edge.
 
+## Product website typography
+
+The website loads DM Sans and Manrope from Google Fonts. Both are SIL Open Font License 1.1 fonts; they are not included in the SDK packages or self-hosted in this source tree. If fonts are later bundled locally, retain their copyright and OFL notices.
+
+- [DM Sans license](https://github.com/google/fonts/blob/main/ofl/dmsans/OFL.txt)
+- [Manrope license](https://github.com/google/fonts/blob/main/ofl/manrope/OFL.txt)
+
+The website privacy notice discloses third-party font requests. Website JavaScript and geometry use browser APIs without additional package dependencies.
+
 ## Release check
+
+October 8, 2026: `dotnet list PixelViewport.sln package --vulnerable --include-transitive` reported no known vulnerable packages for any of the 12 projects against the configured feeds. This is a point-in-time advisory check, not a security guarantee.
 
 Before publishing:
 
