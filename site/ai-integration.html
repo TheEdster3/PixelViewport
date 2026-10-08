@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>AI integration — PixelViewport documentation</title><meta name="description" content="PixelViewport Community SDK: AI integration. Versioned contracts, compiled examples, and explicit evaluation boundaries."><link rel="canonical" href="https://pixelviewport-vision.glassyloach1.chatgpt.site/ai-integration.html"><link rel="icon" href="favicon.svg"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="docs.css"></head>
+<body class="docs-body"><a class="skip" href="#doc-content">Skip to content</a><header class="header wrap"><a class="brand" href="index.html"><img class="brand-mark" src="favicon.svg" alt="" width="30" height="30">PixelViewport<span class="brand-vision">VISION</span></a><nav aria-label="Main navigation"><a href="index.html#playground">Live demo</a><a href="docs.html">Docs</a><a class="nav-cta" href="demo.html">Windows download</a></nav></header>
+<div class="doc-status wrap"><span>DEVELOPER REFERENCE / COMMUNITY ALPHA</span><a href="llms-full.txt">Plain-text AI context ↗</a></div>
+<div class="doc-layout wrap"><aside class="doc-nav"><details open><summary>Documentation</summary><nav aria-label="Documentation"><a href="docs.html">Overview</a><a href="demo.html">Windows demo</a><a href="quickstart.html">Quickstart</a><a href="api.html">API reference</a><a href="ownership.html">Ownership &amp; threading</a><a href="recipes.html">Compiled recipes</a><a href="ai-integration.html" aria-current="page">AI integration</a><a href="troubleshooting.html">Troubleshooting</a><a href="performance-guide.html">Performance</a><a href="dependencies.html">Dependencies &amp; licenses</a></nav></details><div class="doc-source"><span>SOURCE OF TRUTH</span><a href="https://github.com/TheEdster3/PixelViewport/blob/main/docs/ai-integration.md">View this document on GitHub ↗</a><a href="sdk-manifest.json">Structured SDK manifest ↗</a></div></aside><main id="doc-content" class="doc-content"><h1 id="integrating-with-an-ai-coding-assistant">Integrating with an AI coding assistant</h1>
+<p>More context helps only when it is accurate, relevant, and versioned. Start with the package/API reference, the ownership guide, and the compiled recipes. Do not send a coding assistant a roadmap as if it described available methods.</p>
+<h2 id="context-files">Context files</h2>
+<p>The website exposes <a href="https://pixelviewport-vision.glassyloach1.chatgpt.site/llms.txt">llms.txt</a> as a documentation index and <a href="https://pixelviewport-vision.glassyloach1.chatgpt.site/llms-full.txt">llms-full.txt</a> as a plain-text bundle of the maintained guides and compiled examples, plus a <a href="https://pixelviewport-vision.glassyloach1.chatgpt.site/sdk-manifest.json">structured SDK manifest</a>. These are convenience files, not an authentication protocol, executable agent instructions, or a guarantee that every assistant will discover them automatically. Attach/link the relevant documents yourself.</p>
+<p>Prefer scoped context: API + ownership + one integration recipe. Use the full bundle when the assistant must design an integration across packages. Keep the release tag, SDK, UI framework, source format, stride, and lifetime model with the context.</p>
+<h2 id="a-ready-to-adapt-integration-brief">A ready-to-adapt integration brief</h2>
+<div class="doc-code"><span>text</span><pre><code>Integrate PixelViewport Community into my existing .NET 8 Avalonia application.
+Read the API reference, ownership/threading guide, and compiled examples first.
+Use only APIs implemented in the selected public release/source tag.
+
+Framework: Avalonia [version]. OS: Windows [version].
+Release/source tag: [exact version; current download is v0.2.0-alpha.2].
+Input: [managed camera callback / native buffer / OpenCvSharp Mat].
+Format: [exact ImagePixelFormat or MatType].
+Dimensions: [width, height]. Stride: [bytes per row, including padding].
+Lifetime: [callback-only / retained camera lease / pool owner / transferred Mat].
+Target rate: [FPS target, not an existing performance guarantee].
+Overlay requirements: [basic rectangles; describe any unmet needs separately].
+
+Keep acquisition and processing outside the viewport.
+Use CopyFrom/MatFrameAdapter.Copy when source lifetime cannot be retained.
+Create/configure/dispose UI controls on the UI thread. SubmitFrame may run
+on the producer thread. Do not queue every frame on the UI dispatcher.
+Do not dispose/reuse a submitted frame or its bytes from producer code.
+Use BitsPerChannel, not BitDepth. TryGetPixel takes IMAGE coordinates.
+Do not invent Avalonia ZoomIn, ZoomAt, LUT, ROI-edit, GPU, or WPF APIs.
+Keep WinUI and Avalonia namespaces/contracts distinct.
+
+Deliver a compiling integration, ownership/shutdown explanation, and tests
+for format/stride, raw inspection, drop behavior, and disposal on rejection.
+Report unsupported requirements and unverified platforms explicitly.
+Do not upload proprietary frames, camera secrets, or customer data.</code></pre></div>
+<p>Replace bracketed fields with actual facts. This template is a request for your chosen assistant; it does not authorize it to access credentials, publish your repository, or contact others.</p>
+<h2 id="common-hallucinations-to-catch">Common hallucinations to catch</h2>
+<div class="doc-table" tabindex="0" role="region" aria-label="Reference table"><table><thead><tr><th scope="col">Incorrect assumption</th><th scope="col">Actual contract</th></tr></thead><tbody><tr><td>sample.BitDepth</td><td>sample.BitsPerChannel</td></tr><tr><td>Avalonia viewport.ZoomIn()/ZoomAt()</td><td>Not public Avalonia methods in this alpha; WinUI has its own commands</td></tr><tr><td>TryGetPixel takes a screen point</td><td>It takes image coordinates; convert first</td></tr><tr><td>Wrap makes bytes immutable</td><td>It leases the same backing bytes</td></tr><tr><td>TakeOwnership means zero-copy display</td><td>It avoids an input copy; renderer still converts/presents a bitmap</td></tr><tr><td>Label/Confidence are drawn annotations</td><td>Community renders rectangle outlines only</td></tr><tr><td>Browser F/arrows/+ shortcuts are native SDK shortcuts</td><td>Browser behavior is separate</td></tr><tr><td>Acquisition timestamp is monotonic latency</td><td>PresentationAge is wall-clock diagnostic</td></tr><tr><td>Cross-platform framework means Linux verified</td><td>Windows only has been validated</td></tr></tbody></table></div>
+<h2 id="acceptance-checklist">Acceptance checklist</h2>
+<ul><li>Pin package versions and verify package source; do not assume NuGet.org publication.</li><li>Compile against the actual source/tag, not copied pseudo-APIs.</li><li>Test a known pixel pattern, padded rows, and each intended MatType.</li><li>Confirm no camera buffer is returned or reused while still leased.</li><li>Confirm shutdown cancels/joins the producer and disposes the viewport on UI thread.</li><li>Exercise a producer faster than presentation; confirm bounded pending memory and counters.</li><li>Check pointer/image conversions after zoom, pan, resize, and DPI changes.</li><li>Measure the complete application separately from the CPU conversion probe.</li><li>Record unsupported formats/features and target-platform risks before production use.</li></ul>
+<h2 id="review-generated-code">Review generated code</h2>
+<p>The compiler catches nonexistent names, but not lifetime errors. A producer-side using around a transferred Mat can compile and still corrupt the display. Review every ownership boundary, exception path, dispatcher call, and queue. AI-generated output needs the same tests and review as handwritten integration code.</p><div class="doc-end">Public MIT foundation. Windows verified; Linux unverified. Alpha APIs may change.<br><a href="https://github.com/TheEdster3/PixelViewport/blob/main/docs/ai-integration.md">Inspect source and history</a> · <a href="https://github.com/TheEdster3/PixelViewport/issues/new?template=bug.yml">Report an issue</a></div></main><aside class="doc-toc"><span>ON THIS PAGE</span><nav aria-label="On this page"><a href="#context-files">Context files</a><a href="#a-ready-to-adapt-integration-brief">A ready-to-adapt integration brief</a><a href="#common-hallucinations-to-catch">Common hallucinations to catch</a><a href="#acceptance-checklist">Acceptance checklist</a><a href="#review-generated-code">Review generated code</a></nav></aside></div>
+<footer class="footer wrap"><p>PixelViewport / image display for .NET vision teams.</p><div class="footer-links"><a href="https://github.com/TheEdster3/PixelViewport">GitHub</a><a href="privacy.html">Privacy</a></div></footer></body></html>

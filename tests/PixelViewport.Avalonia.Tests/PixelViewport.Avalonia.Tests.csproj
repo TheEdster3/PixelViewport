@@ -9,5 +9,7 @@
     <PackageReference Include="Avalonia.Headless" />
     <PackageReference Include="Avalonia.Themes.Fluent" />
     <ProjectReference Include="..\..\src\PixelViewport.Avalonia\PixelViewport.Avalonia.csproj" />
+    <ProjectReference Include="..\..\samples\PixelViewport.VisionDemo\PixelViewport.VisionDemo.csproj" />
+    <Compile Include="..\..\docs\examples\IntegrationExamples.cs" Link="IntegrationExamples.cs" />
   </ItemGroup>
 </Project>

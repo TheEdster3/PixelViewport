@@ -13,6 +13,13 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify site and generated documentation
+        run: |
+          node scripts/check-site.mjs
+          node scripts/build-docs.mjs --check
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
@@ -47,6 +54,9 @@ jobs:
         run: dotnet pack src/PixelViewport.WinUI/PixelViewport.WinUI.csproj -c Release --no-build -o artifacts/packages -p:Version=${{ steps.version.outputs.value }}
       - name: Pack Avalonia
         run: dotnet pack src/PixelViewport.Avalonia/PixelViewport.Avalonia.csproj -c Release --no-build -o artifacts/packages -p:Version=${{ steps.version.outputs.value }}
+      - name: Package and launch self-contained Windows evaluation demo
+        shell: pwsh
+        run: ./scripts/publish-demo.ps1 -Version '${{ steps.version.outputs.value }}'
       - uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
@@ -54,3 +64,5 @@ jobs:
           files: |
             artifacts/packages/*.nupkg
             artifacts/packages/*.snupkg
+            artifacts/demo/PixelViewport-VisionDemo-win-x64.zip
+            artifacts/demo/SHA256SUMS.txt

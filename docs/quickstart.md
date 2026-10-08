@@ -1,5 +1,7 @@
 # Windows quickstart
 
+For evaluation without installing .NET, use the [self-contained Windows download](demo.md).
+
 ## Run the Avalonia vision sample
 
 Prerequisites: Windows and .NET 8 SDK. The solution also contains a WinUI sample using Windows App SDK.
@@ -10,14 +12,14 @@ cd PixelViewport
 dotnet run --project samples/PixelViewport.VisionDemo -c Release
 ```
 
-The sample generates 960x600 BGRA32 frames at a **30 FPS target**, not a throughput guarantee. Wheel zoom follows the cursor; left drag pans after zoom; Fit and 100% reset the view. The footer shows image coordinates, RGB values, sequence, replaced-frame count, and application presentation age.
+The sample defaults to 960x600 Gray16 frames at a **30 FPS target**, not a throughput guarantee. Select six pixel formats, five ownership sources, padding, and 5/30/60 target FPS. Wheel zoom follows the cursor; left drag pans after zoom; Fit and 100% reset the view. The footer shows image coordinates, RGB values, sequence, replaced-frame count, and application presentation age.
 
 ```powershell
 ./scripts/verify.ps1
 ./scripts/package.ps1
 ```
 
-Verification covers the Windows solution, 71 unit/native tests, four headless Avalonia checks, and a conversion probe. Packages go to `artifacts/packages`.
+Verification covers the Windows solution, 71 unit/native tests, six headless Avalonia checks, and a conversion probe. Packages go to `artifacts/packages`.
 
 ## Install alpha packages from the release
 
@@ -25,8 +27,8 @@ Download all `.nupkg` files from the [alpha release](https://github.com/TheEdste
 
 ```powershell
 dotnet nuget add source C:/path/to/pixelviewport-packages --name PixelViewportLocal
-dotnet add package PixelViewport.Avalonia --version 0.2.0-alpha.1
-dotnet add package PixelViewport.OpenCvSharp --version 0.2.0-alpha.1
+dotnet add package PixelViewport.Avalonia --version 0.2.0-alpha.2
+dotnet add package PixelViewport.OpenCvSharp --version 0.2.0-alpha.2
 ```
 
 NuGet.org supplies adapter dependencies. Add a matching native OpenCV runtime separately when using OpenCvSharp. Review [dependency licenses](dependencies.md).

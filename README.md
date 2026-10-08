@@ -5,9 +5,9 @@ The vendor-neutral image display and interaction layer for .NET machine-vision, 
 [![Windows CI](https://github.com/TheEdster3/PixelViewport/actions/workflows/ci.yml/badge.svg)](https://github.com/TheEdster3/PixelViewport/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-5ae8bb)](LICENSE)
 
-[Website and interactive illustration](https://pixelviewport-vision.glassyloach1.chatgpt.site/) · [Alpha downloads](https://github.com/TheEdster3/PixelViewport/releases) · [Quickstart](docs/quickstart.md) · [Request an evaluation](https://github.com/TheEdster3/PixelViewport/issues/new?template=evaluation.yml)
+[Website and interactive illustration](https://pixelviewport-vision.glassyloach1.chatgpt.site/) · [Alpha downloads](https://github.com/TheEdster3/PixelViewport/releases) · [Documentation](https://pixelviewport-vision.glassyloach1.chatgpt.site/docs.html) · [Windows demo](docs/demo.md) · [Quickstart](docs/quickstart.md) · [Request an evaluation](https://github.com/TheEdster3/PixelViewport/issues/new?template=evaluation.yml)
 
-> **Status:** `0.2.0-alpha.1` foundation. WinUI is the verified Windows baseline. The new framework-neutral frame pipeline and Avalonia adapter are an evaluation-quality correctness path while production rendering is measured with real workloads.
+> **Status:** `0.2.0-alpha.2` foundation. WinUI is the verified Windows baseline. The new framework-neutral frame pipeline and Avalonia adapter are an evaluation-quality correctness path while production rendering is measured with real workloads.
 
 ## Why it exists
 
@@ -31,7 +31,7 @@ The Avalonia adapter accepts `Gray8`, little-endian `Gray16`, `RGB24`, `BGR24`, 
 dotnet run --project samples/PixelViewport.VisionDemo/PixelViewport.VisionDemo.csproj -c Release
 ```
 
-The demo generates a 960×600 stream at a 30 FPS target on a background thread. Drag to pan, use the mouse wheel to zoom around the cursor, and inspect RGB coordinates in the footer.
+Download the self-contained Windows application from the release, or build from source. The demo generates a 960×600 stream at a 30 FPS target on a background thread, with six selectable formats and five ownership sources. Drag to pan, use the mouse wheel to zoom around the cursor, and inspect RGB coordinates in the footer.
 
 ## Submit a frame
 

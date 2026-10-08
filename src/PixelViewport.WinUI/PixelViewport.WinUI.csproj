@@ -8,7 +8,7 @@
 
     <IsPackable>true</IsPackable>
     <PackageId>PixelViewport.WinUI</PackageId>
-    <Version>0.2.0-alpha.1</Version>
+    <Version>0.2.0-alpha.2</Version>
     <Authors>PixelViewport contributors</Authors>
     <Description>A precise zoomable and pannable image viewport control for WinUI 3.</Description>
     <PackageTags>winui;winui3;image;viewer;zoom;pan;imaging;windowsappsdk</PackageTags>

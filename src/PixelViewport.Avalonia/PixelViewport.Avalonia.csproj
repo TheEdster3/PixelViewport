@@ -7,7 +7,7 @@
 
     <IsPackable>true</IsPackable>
     <PackageId>PixelViewport.Avalonia</PackageId>
-    <Version>0.2.0-alpha.1</Version>
+    <Version>0.2.0-alpha.2</Version>
     <Authors>PixelViewport contributors</Authors>
     <Description>A cross-platform Avalonia image viewport and evaluation adapter for PixelViewport.</Description>
     <PackageTags>avalonia;image;machine-vision;scientific;zoom;pan</PackageTags>

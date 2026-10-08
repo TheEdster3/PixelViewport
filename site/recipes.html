@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Compiled recipes — PixelViewport documentation</title><meta name="description" content="PixelViewport Community SDK: Compiled recipes. Versioned contracts, compiled examples, and explicit evaluation boundaries."><link rel="canonical" href="https://pixelviewport-vision.glassyloach1.chatgpt.site/recipes.html"><link rel="icon" href="favicon.svg"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="docs.css"></head>
+<body class="docs-body"><a class="skip" href="#doc-content">Skip to content</a><header class="header wrap"><a class="brand" href="index.html"><img class="brand-mark" src="favicon.svg" alt="" width="30" height="30">PixelViewport<span class="brand-vision">VISION</span></a><nav aria-label="Main navigation"><a href="index.html#playground">Live demo</a><a href="docs.html">Docs</a><a class="nav-cta" href="demo.html">Windows download</a></nav></header>
+<div class="doc-status wrap"><span>DEVELOPER REFERENCE / COMMUNITY ALPHA</span><a href="llms-full.txt">Plain-text AI context ↗</a></div>
+<div class="doc-layout wrap"><aside class="doc-nav"><details open><summary>Documentation</summary><nav aria-label="Documentation"><a href="docs.html">Overview</a><a href="demo.html">Windows demo</a><a href="quickstart.html">Quickstart</a><a href="api.html">API reference</a><a href="ownership.html">Ownership &amp; threading</a><a href="recipes.html" aria-current="page">Compiled recipes</a><a href="ai-integration.html">AI integration</a><a href="troubleshooting.html">Troubleshooting</a><a href="performance-guide.html">Performance</a><a href="dependencies.html">Dependencies &amp; licenses</a></nav></details><div class="doc-source"><span>SOURCE OF TRUTH</span><a href="https://github.com/TheEdster3/PixelViewport/blob/main/docs/recipes.md">View this document on GitHub ↗</a><a href="sdk-manifest.json">Structured SDK manifest ↗</a></div></aside><main id="doc-content" class="doc-content"><h1 id="compiled-integration-recipes">Compiled integration recipes</h1>
+<p>These examples are compiled and exercised by the headless verification project. Each recipe is extracted from <a href="https://github.com/TheEdster3/PixelViewport/blob/main/docs/examples/IntegrationExamples.cs">IntegrationExamples.cs</a>, so the website code and compiled code share a source.</p>
+<h2 id="shared-imports">Shared imports</h2>
+<p>Use System.Buffers, System.Buffers.Binary, global::Avalonia, PixelViewport.Imaging, PixelViewport.Core.Geometry, and PixelViewport.OpenCvSharp. Alias VisionViewport to PixelViewport.Avalonia.ImageViewport. Each method assumes an existing Avalonia UI application; these are integration helpers, not a standalone program.</p>
+<div class="doc-code"><span>csharp</span><pre><code>using System.Buffers;
+using System.Buffers.Binary;
+using global::Avalonia;
+using PixelViewport.Core.Geometry;
+using PixelViewport.Imaging;
+using PixelViewport.OpenCvSharp;
+using VisionViewport = PixelViewport.Avalonia.ImageViewport;</code></pre></div>
+<h2 id="managed-lease">Managed lease</h2>
+<p>Create a full-range Gray16 image in pooled memory. Transfer the lifetime to the frame; clean it up if factory validation fails. Do not dispose the owner after submission.</p>
+<div class="doc-code"><span>csharp</span><pre><code>public static void SubmitManagedLease(VisionViewport viewport)
+{
+    const int width = 640, height = 480, stride = width * 2;
+    IMemoryOwner&lt;byte&gt; owner = MemoryPool&lt;byte&gt;.Shared.Rent(stride * height);
+    PixelFrame frame;
+    try
+    {
+        owner.Memory.Span[..(stride * height)].Clear();
+        for (int y = 0; y &lt; height; y++)
+            for (int x = 0; x &lt; width; x++)
+                BinaryPrimitives.WriteUInt16LittleEndian(
+                    owner.Memory.Span.Slice(y * stride + x * 2, 2),
+                    (ushort)(x * 65535 / (width - 1)));
+        frame = PixelFrame.Wrap(owner.Memory[..(stride * height)],
+            width, height, stride, ImagePixelFormat.Gray16LittleEndian,
+            sequenceNumber: 1, timestamp: DateTimeOffset.UtcNow, lifetime: owner);
+    }
+    catch { owner.Dispose(); throw; } // Factory failed: producer still owns lease.
+    viewport.SubmitFrame(frame); // Ownership transfers; no producer-side using.
+}</code></pre></div>
+<h2 id="safe-camera-callback-copy">Safe camera callback copy</h2>
+<p>When the camera callback's buffer cannot be retained, copy before returning from the callback. Keep camera acquisition in your application.</p>
+<div class="doc-code"><span>csharp</span><pre><code>public static void SubmitCameraCallback(VisionViewport viewport,
+    ReadOnlySpan&lt;byte&gt; callbackBytes, int width, int height, int stride)
+{
+    var frame = PixelFrame.CopyFrom(callbackBytes, width, height, stride,
+        ImagePixelFormat.Bgra32, timestamp: DateTimeOffset.UtcNow);
+    viewport.SubmitFrame(frame);
+    // Caller may now return/reuse callbackBytes; the frame owns a copy.
+}</code></pre></div>
+<h2 id="retained-opencvsharp-mat">Retained OpenCvSharp Mat</h2>
+<p>Make a frame copy while retaining caller ownership of the original Mat. Supply the matching native runtime in the host application.</p>
+<div class="doc-code"><span>csharp</span><pre><code>public static void SubmitRetainedMat(VisionViewport viewport, global::OpenCvSharp.Mat matrix)
+{
+    viewport.SubmitFrame(MatFrameAdapter.Copy(matrix));
+    // Caller retains matrix and disposes it independently.
+}</code></pre></div>
+<h2 id="transferred-opencvsharp-mat">Transferred OpenCvSharp Mat</h2>
+<p>Pass a Mat the producer no longer needs. A producer-side using block around that Mat would be incorrect after transfer.</p>
+<div class="doc-code"><span>csharp</span><pre><code>public static void SubmitOwnedMat(VisionViewport viewport, global::OpenCvSharp.Mat matrix)
+{
+    PixelFrame frame = MatFrameAdapter.TakeOwnership(matrix);
+    viewport.SubmitFrame(frame);
+    // Do not dispose, mutate, or reuse matrix after successful transfer.
+}</code></pre></div>
+<h2 id="pointer-inspection">Pointer inspection</h2>
+<p>Convert from viewport DIPs to image coordinates before querying the pixel. This preserves the distinction between a raw sample and its display mapping.</p>
+<div class="doc-code"><span>csharp</span><pre><code>public static string InspectAtViewportPoint(VisionViewport viewport, Point viewportPoint)
+{
+    Point imagePoint = viewport.ViewportToImage(viewportPoint);
+    return viewport.TryGetPixel(imagePoint, out PixelSample sample)
+        ? $&quot;Intensity {sample.Intensity}; channels {sample.BitsPerChannel}-bit&quot;
+        : &quot;Outside image&quot;;
+}</code></pre></div>
+<h2 id="analysis-rectangle">Analysis rectangle</h2>
+<p>The application supplies the rectangle and optional metadata. Community renders an outline only; it does not calculate detection results or confidence.</p>
+<div class="doc-code"><span>csharp</span><pre><code>public static void ShowAnalysisRegion(VisionViewport viewport)
+{
+    viewport.SetOverlays([new RectangleOverlay(
+        new RectD(100, 80, 160, 120), &quot;Example result&quot;, 0.9, 0xFFA3F4BF)]);
+    // Only outlines are rendered in Community; Label/Confidence are metadata.
+}</code></pre></div>
+<h2 id="shutdown">Shutdown</h2>
+<p>Cancel and await your producer before closing/disposal. Dispose the viewport on its UI thread. If cancellation races a final SubmitFrame, the disposed mailbox releases the rejected incoming frame and throws ObjectDisposedException. Do not catch and ignore unrelated lifetime errors.</p><div class="doc-end">Public MIT foundation. Windows verified; Linux unverified. Alpha APIs may change.<br><a href="https://github.com/TheEdster3/PixelViewport/blob/main/docs/recipes.md">Inspect source and history</a> · <a href="https://github.com/TheEdster3/PixelViewport/issues/new?template=bug.yml">Report an issue</a></div></main><aside class="doc-toc"><span>ON THIS PAGE</span><nav aria-label="On this page"><a href="#shared-imports">Shared imports</a><a href="#managed-lease">Managed lease</a><a href="#safe-camera-callback-copy">Safe camera callback copy</a><a href="#retained-opencvsharp-mat">Retained OpenCvSharp Mat</a><a href="#transferred-opencvsharp-mat">Transferred OpenCvSharp Mat</a><a href="#pointer-inspection">Pointer inspection</a><a href="#analysis-rectangle">Analysis rectangle</a><a href="#shutdown">Shutdown</a></nav></aside></div>
+<footer class="footer wrap"><p>PixelViewport / image display for .NET vision teams.</p><div class="footer-links"><a href="https://github.com/TheEdster3/PixelViewport">GitHub</a><a href="privacy.html">Privacy</a></div></footer></body></html>

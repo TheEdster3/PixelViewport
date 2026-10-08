@@ -11,5 +11,7 @@
     <PackageReference Include="Avalonia.Desktop" />
     <PackageReference Include="Avalonia.Themes.Fluent" />
     <ProjectReference Include="..\..\src\PixelViewport.Avalonia\PixelViewport.Avalonia.csproj" />
+    <ProjectReference Include="..\..\src\PixelViewport.OpenCvSharp\PixelViewport.OpenCvSharp.csproj" />
+    <PackageReference Include="OpenCvSharp4.runtime.win" />
   </ItemGroup>
 </Project>

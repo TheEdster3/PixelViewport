@@ -19,6 +19,8 @@ jobs:
           node-version: '22'
       - name: Validate product site
         run: node scripts/check-site.mjs
+      - name: Verify generated documentation and compiled recipe extraction
+        run: node scripts/build-docs.mjs --check
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'

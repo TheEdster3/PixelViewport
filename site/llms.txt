@@ -1,0 +1,19 @@
+# PixelViewport Vision
+
+Public Community alpha: vendor-neutral .NET image display and interaction. Windows verified; Linux unverified. No production GPU renderer, WPF adapter, window/level, editable ROI, or acquisition API.
+
+- [Overview](https://pixelviewport-vision.glassyloach1.chatgpt.site/docs.html)
+- [Windows demo](https://pixelviewport-vision.glassyloach1.chatgpt.site/demo.html)
+- [Quickstart](https://pixelviewport-vision.glassyloach1.chatgpt.site/quickstart.html)
+- [API reference](https://pixelviewport-vision.glassyloach1.chatgpt.site/api.html)
+- [Ownership & threading](https://pixelviewport-vision.glassyloach1.chatgpt.site/ownership.html)
+- [Compiled recipes](https://pixelviewport-vision.glassyloach1.chatgpt.site/recipes.html)
+- [AI integration](https://pixelviewport-vision.glassyloach1.chatgpt.site/ai-integration.html)
+- [Troubleshooting](https://pixelviewport-vision.glassyloach1.chatgpt.site/troubleshooting.html)
+- [Performance](https://pixelviewport-vision.glassyloach1.chatgpt.site/performance-guide.html)
+- [Dependencies & licenses](https://pixelviewport-vision.glassyloach1.chatgpt.site/dependencies.html)
+
+Full context: https://pixelviewport-vision.glassyloach1.chatgpt.site/llms-full.txt
+Compiled examples: https://github.com/TheEdster3/PixelViewport/blob/main/docs/examples/IntegrationExamples.cs
+Structured manifest: https://pixelviewport-vision.glassyloach1.chatgpt.site/sdk-manifest.json
+These files are explicit context resources, not a guarantee of automatic AI discovery.

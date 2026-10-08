@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "product": "PixelViewport Community",
+  "version": "0.2.0-alpha.2",
+  "targetFramework": "net8.0",
+  "verifiedPlatform": "Windows",
+  "unverifiedPlatforms": [
+    "Linux",
+    "embedded hardware"
+  ],
+  "packages": [
+    "PixelViewport.Core",
+    "PixelViewport.Imaging",
+    "PixelViewport.Avalonia",
+    "PixelViewport.OpenCvSharp",
+    "PixelViewport.WinUI"
+  ],
+  "formats": [
+    "Gray8",
+    "Gray16LittleEndian",
+    "Rgb24",
+    "Bgr24",
+    "Rgba32",
+    "Bgra32"
+  ],
+  "renderer": "UI-thread CPU conversion / Avalonia WriteableBitmap",
+  "submission": "LatestFrameMailbox / bounded single pending frame / ownership transfer",
+  "inspectionMember": "PixelSample.BitsPerChannel",
+  "unavailable": [
+    "GPU renderer",
+    "WPF adapter",
+    "window/level",
+    "editable ROI",
+    "calibrated measurements",
+    "camera acquisition"
+  ],
+  "docs": [
+    {
+      "title": "Overview",
+      "url": "https://pixelviewport-vision.glassyloach1.chatgpt.site/docs.html",
+      "source": "docs/index.md"
+    },
+    {
+      "title": "Windows demo",
+      "url": "https://pixelviewport-vision.glassyloach1.chatgpt.site/demo.html",
+      "source": "docs/demo.md"
+    },
+    {
+      "title": "Quickstart",
+      "url": "https://pixelviewport-vision.glassyloach1.chatgpt.site/quickstart.html",
+      "source": "docs/quickstart.md"
+    },
+    {
+      "title": "API reference",
+      "url": "https://pixelviewport-vision.glassyloach1.chatgpt.site/api.html",
+      "source": "docs/api.md"
+    },
+    {
+      "title": "Ownership & threading",
+      "url": "https://pixelviewport-vision.glassyloach1.chatgpt.site/ownership.html",
+      "source": "docs/ownership.md"
+    },
+    {
+      "title": "Compiled recipes",
+      "url": "https://pixelviewport-vision.glassyloach1.chatgpt.site/recipes.html",
+      "source": "docs/recipes.md"
+    },
+    {
+      "title": "AI integration",
+      "url": "https://pixelviewport-vision.glassyloach1.chatgpt.site/ai-integration.html",
+      "source": "docs/ai-integration.md"
+    },
+    {
+      "title": "Troubleshooting",
+      "url": "https://pixelviewport-vision.glassyloach1.chatgpt.site/troubleshooting.html",
+      "source": "docs/troubleshooting.md"
+    },
+    {
+      "title": "Performance",
+      "url": "https://pixelviewport-vision.glassyloach1.chatgpt.site/performance-guide.html",
+      "source": "docs/performance.md"
+    },
+    {
+      "title": "Dependencies & licenses",
+      "url": "https://pixelviewport-vision.glassyloach1.chatgpt.site/dependencies.html",
+      "source": "docs/dependencies.md"
+    }
+  ]
+}

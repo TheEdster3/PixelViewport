@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Quickstart — PixelViewport documentation</title><meta name="description" content="PixelViewport Community SDK: Quickstart. Versioned contracts, compiled examples, and explicit evaluation boundaries."><link rel="canonical" href="https://pixelviewport-vision.glassyloach1.chatgpt.site/quickstart.html"><link rel="icon" href="favicon.svg"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="docs.css"></head>
+<body class="docs-body"><a class="skip" href="#doc-content">Skip to content</a><header class="header wrap"><a class="brand" href="index.html"><img class="brand-mark" src="favicon.svg" alt="" width="30" height="30">PixelViewport<span class="brand-vision">VISION</span></a><nav aria-label="Main navigation"><a href="index.html#playground">Live demo</a><a href="docs.html">Docs</a><a class="nav-cta" href="demo.html">Windows download</a></nav></header>
+<div class="doc-status wrap"><span>DEVELOPER REFERENCE / COMMUNITY ALPHA</span><a href="llms-full.txt">Plain-text AI context ↗</a></div>
+<div class="doc-layout wrap"><aside class="doc-nav"><details open><summary>Documentation</summary><nav aria-label="Documentation"><a href="docs.html">Overview</a><a href="demo.html">Windows demo</a><a href="quickstart.html" aria-current="page">Quickstart</a><a href="api.html">API reference</a><a href="ownership.html">Ownership &amp; threading</a><a href="recipes.html">Compiled recipes</a><a href="ai-integration.html">AI integration</a><a href="troubleshooting.html">Troubleshooting</a><a href="performance-guide.html">Performance</a><a href="dependencies.html">Dependencies &amp; licenses</a></nav></details><div class="doc-source"><span>SOURCE OF TRUTH</span><a href="https://github.com/TheEdster3/PixelViewport/blob/main/docs/quickstart.md">View this document on GitHub ↗</a><a href="sdk-manifest.json">Structured SDK manifest ↗</a></div></aside><main id="doc-content" class="doc-content"><h1 id="windows-quickstart">Windows quickstart</h1>
+<p>For evaluation without installing .NET, use the <a href="demo.html">self-contained Windows download</a>.</p>
+<h2 id="run-the-avalonia-vision-sample">Run the Avalonia vision sample</h2>
+<p>Prerequisites: Windows and .NET 8 SDK. The solution also contains a WinUI sample using Windows App SDK.</p>
+<div class="doc-code"><span>powershell</span><pre><code>git clone https://github.com/TheEdster3/PixelViewport.git
+cd PixelViewport
+dotnet run --project samples/PixelViewport.VisionDemo -c Release</code></pre></div>
+<p>The sample defaults to 960x600 Gray16 frames at a <strong>30 FPS target</strong>, not a throughput guarantee. Select six pixel formats, five ownership sources, padding, and 5/30/60 target FPS. Wheel zoom follows the cursor; left drag pans after zoom; Fit and 100% reset the view. The footer shows image coordinates, RGB values, sequence, replaced-frame count, and application presentation age.</p>
+<div class="doc-code"><span>powershell</span><pre><code>./scripts/verify.ps1
+./scripts/package.ps1</code></pre></div>
+<p>Verification covers the Windows solution, 71 unit/native tests, six headless Avalonia checks, and a conversion probe. Packages go to <code>artifacts/packages</code>.</p>
+<h2 id="install-alpha-packages-from-the-release">Install alpha packages from the release</h2>
+<p>Download all <code>.nupkg</code> files from the <a href="https://github.com/TheEdster3/PixelViewport/releases">alpha release</a>, put them in a local folder, and add it as a feed. Do not assume NuGet.org listings exist until publication is confirmed.</p>
+<div class="doc-code"><span>powershell</span><pre><code>dotnet nuget add source C:/path/to/pixelviewport-packages --name PixelViewportLocal
+dotnet add package PixelViewport.Avalonia --version 0.2.0-alpha.2
+dotnet add package PixelViewport.OpenCvSharp --version 0.2.0-alpha.2</code></pre></div>
+<p>NuGet.org supplies adapter dependencies. Add a matching native OpenCV runtime separately when using OpenCvSharp. Review <a href="dependencies.html">dependency licenses</a>.</p>
+<h2 id="add-an-avalonia-viewport">Add an Avalonia viewport</h2>
+<div class="doc-code"><span>csharp</span><pre><code>var viewport = new PixelViewport.Avalonia.ImageViewport();
+// Add viewport to your window/layout on the UI thread.
+viewport.SubmitFrame(PixelViewport.Imaging.PixelFrame.CopyFrom(
+    pixels, width, height, stride,
+    PixelViewport.Imaging.ImagePixelFormat.Bgra32));</code></pre></div>
+<p>Submission transfers ownership. Use <code>Wrap</code> with a lifetime lease for no-copy input; do not reuse that memory while leased. No-copy input is not a zero-copy renderer promise. Dispose the viewport when its host closes.</p>
+<ul><li><a href="https://pixelviewport-vision.glassyloach1.chatgpt.site/opencv.html">OpenCvSharp integration</a></li><li><a href="https://pixelviewport-vision.glassyloach1.chatgpt.site/gray16.html">16-bit display and inspection</a></li><li><a href="performance-guide.html">Performance contract</a></li></ul>
+<h2 id="existing-winui-baseline">Existing WinUI baseline</h2>
+<div class="doc-code"><span>powershell</span><pre><code>dotnet run --project samples/PixelViewport.Sample -c Release</code></pre></div>
+<p>In XAML, use <code>xmlns:pv=&quot;using:PixelViewport.WinUI.Controls&quot;</code> and <code>&lt;pv:ImageViewport Source=&quot;{x:Bind ViewModel.Image}&quot; AutoFit=&quot;True&quot; /&gt;</code>. The source is a WinUI image source; Avalonia raw-frame APIs are not interchangeable with WinUI APIs.</p>
+<p>Interactive ROI editing is not in this Community alpha. Linux and embedded targets have not been validated.</p><div class="doc-end">Public MIT foundation. Windows verified; Linux unverified. Alpha APIs may change.<br><a href="https://github.com/TheEdster3/PixelViewport/blob/main/docs/quickstart.md">Inspect source and history</a> · <a href="https://github.com/TheEdster3/PixelViewport/issues/new?template=bug.yml">Report an issue</a></div></main><aside class="doc-toc"><span>ON THIS PAGE</span><nav aria-label="On this page"><a href="#run-the-avalonia-vision-sample">Run the Avalonia vision sample</a><a href="#install-alpha-packages-from-the-release">Install alpha packages from the release</a><a href="#add-an-avalonia-viewport">Add an Avalonia viewport</a><a href="#existing-winui-baseline">Existing WinUI baseline</a></nav></aside></div>
+<footer class="footer wrap"><p>PixelViewport / image display for .NET vision teams.</p><div class="footer-links"><a href="https://github.com/TheEdster3/PixelViewport">GitHub</a><a href="privacy.html">Privacy</a></div></footer></body></html>

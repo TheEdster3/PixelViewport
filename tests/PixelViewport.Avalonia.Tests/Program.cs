@@ -14,6 +14,8 @@ var cases = new (string Name, Action Test)[]
     ("wheel zoom preserves its image-space anchor", HeadlessCases.WheelZoomPreservesAnchor),
     ("left drag changes pan after zoom", HeadlessCases.LeftDragChangesPan),
     ("disposed viewport releases rejected frame", HeadlessCases.DisposedViewportReleasesRejectedFrame),
+    ("documentation examples compile and present original Gray16", HeadlessCases.DocumentationExamples),
+    ("demo frame sources preserve all six formats and padded rows", HeadlessCases.DemoFrameSources),
 };
 
 foreach ((string name, Action test) in cases)
@@ -41,6 +43,51 @@ public sealed class TestApplication : Application
 
 internal static class HeadlessCases
 {
+    public static void DocumentationExamples()
+    {
+        using var viewport = new ImageViewport();
+        var window = new Window { Width = 320, Height = 240, Content = viewport };
+        window.Show();
+        PixelViewport.Documentation.IntegrationExamples.SubmitManagedLease(viewport);
+        PixelViewport.Documentation.IntegrationExamples.ShowAnalysisRegion(viewport);
+        Dispatcher.UIThread.RunJobs();
+        Check.That(viewport.TryGetPixel(new Point(639, 0), out PixelSample sample), "Gray16 documentation frame absent");
+        Check.Equal((ushort)65535, sample.Intensity, "Raw maximum intensity");
+        Check.Equal(16, sample.BitsPerChannel, "BitsPerChannel");
+        Point position = viewport.ImageToViewport(new Point(639, 0));
+        Check.That(PixelViewport.Documentation.IntegrationExamples.InspectAtViewportPoint(viewport, position).Contains("65535"), "Inspection recipe failed");
+        PixelViewport.Documentation.IntegrationExamples.SubmitCameraCallback(viewport, new byte[] {1,2,3,255}, 1,1,4);
+        Dispatcher.UIThread.RunJobs();
+        using var retained = new global::OpenCvSharp.Mat(1,1,global::OpenCvSharp.MatType.CV_8UC1, new global::OpenCvSharp.Scalar(42));
+        PixelViewport.Documentation.IntegrationExamples.SubmitRetainedMat(viewport, retained);
+        Dispatcher.UIThread.RunJobs();
+        var transferred = new global::OpenCvSharp.Mat(1,1,global::OpenCvSharp.MatType.CV_8UC1, new global::OpenCvSharp.Scalar(43));
+        PixelViewport.Documentation.IntegrationExamples.SubmitOwnedMat(viewport, transferred);
+        Dispatcher.UIThread.RunJobs();
+        Check.That(viewport.TryGetPixel(new Point(0,0), out sample) && sample.Intensity == 43, "Mat recipes failed");
+        window.Close();
+    }
+
+    public static void DemoFrameSources()
+    {
+        foreach (ImagePixelFormat format in Enum.GetValues<ImagePixelFormat>())
+        foreach (PixelViewport.VisionDemo.FrameSource source in Enum.GetValues<PixelViewport.VisionDemo.FrameSource>())
+        foreach (bool padded in new[] { false, true })
+        {
+            var settings = new PixelViewport.VisionDemo.DemoSettings(format, source, padded, 30);
+            using PixelFrame frame = PixelViewport.VisionDemo.SyntheticFrames.Create(settings, 1);
+            PixelSample sample = frame.GetPixel(500,280);
+            Check.Equal(format == ImagePixelFormat.Gray16LittleEndian ? 16 : 8, sample.BitsPerChannel, "Demo bit depth");
+            Check.Equal(960, frame.Width, "Demo width");
+            Check.That(frame.Stride >= frame.Format.GetMinimumStride(frame.Width), "Demo stride invalid");
+            var output = new byte[frame.Width * frame.Height * 4];
+            PixelFrameConverter.CopyToBgra32(frame, output, frame.Width * 4);
+            int offset = (280 * frame.Width + 500) * 4;
+            byte red = sample.BitsPerChannel == 16 ? (byte)(sample.Red >> 8) : (byte)sample.Red;
+            Check.Equal(red, output[offset + 2], "Demo conversion red");
+        }
+    }
+
     public static void SubmittedFrameIsPresentedAndInspectable()
     {
         using var viewport = new ImageViewport();
