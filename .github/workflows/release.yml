@@ -11,8 +11,6 @@ permissions:
 jobs:
   release:
     runs-on: windows-latest
-    env:
-      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
@@ -21,8 +19,11 @@ jobs:
       - name: Resolve version
         id: version
         shell: pwsh
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
         run: |
-          $version = "${{ github.ref_name }}".TrimStart('v')
+          $version = $env:RELEASE_TAG.TrimStart('v')
+          if ($version -notmatch '^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$') { throw 'Invalid version tag' }
           "value=$version" >> $env:GITHUB_OUTPUT
       - name: Restore
         run: dotnet restore PixelViewport.sln
@@ -46,18 +47,10 @@ jobs:
         run: dotnet pack src/PixelViewport.WinUI/PixelViewport.WinUI.csproj -c Release --no-build -o artifacts/packages -p:Version=${{ steps.version.outputs.value }}
       - name: Pack Avalonia
         run: dotnet pack src/PixelViewport.Avalonia/PixelViewport.Avalonia.csproj -c Release --no-build -o artifacts/packages -p:Version=${{ steps.version.outputs.value }}
-      - name: Publish to NuGet
-        if: ${{ env.NUGET_API_KEY != '' }}
-        shell: pwsh
-        run: |
-          Get-ChildItem artifacts/packages/*.nupkg |
-            Where-Object { $_.Name -notlike '*.symbols.nupkg' } |
-            ForEach-Object {
-              dotnet nuget push $_.FullName --api-key "$env:NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
-            }
       - uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
+          prerelease: ${{ contains(steps.version.outputs.value, '-') }}
           files: |
             artifacts/packages/*.nupkg
             artifacts/packages/*.snupkg

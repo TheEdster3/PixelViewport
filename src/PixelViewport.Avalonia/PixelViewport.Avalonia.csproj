@@ -14,8 +14,8 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/OWNER/PixelViewport</RepositoryUrl>
-    <PackageProjectUrl>https://OWNER.github.io/PixelViewport/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/TheEdster3/PixelViewport</RepositoryUrl>
+    <PackageProjectUrl>https://pixelviewport-vision.glassyloach1.chatgpt.site/</PackageProjectUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>

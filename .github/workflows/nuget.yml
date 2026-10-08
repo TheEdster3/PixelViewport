@@ -1,0 +1,56 @@
+name: Publish NuGet
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Existing alpha release tag version (without v)
+        required: true
+        default: '0.2.0-alpha.1'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: windows-latest
+    env:
+      RELEASE_VERSION: ${{ inputs.version }}
+    steps:
+      - name: Validate inputs and publishing setup
+        shell: pwsh
+        env:
+          NUGET_USER: ${{ vars.NUGET_USER }}
+        run: |
+          if ($env:RELEASE_VERSION -notmatch '^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$') { throw 'Invalid release version' }
+          if ([string]::IsNullOrWhiteSpace($env:NUGET_USER)) { throw 'Set NUGET_USER and configure NuGet trusted publishing before running this workflow.' }
+      - uses: actions/checkout@v4
+        with:
+          ref: v${{ inputs.version }}
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Build, test, and package the tagged source
+        shell: pwsh
+        run: |
+          ./scripts/package.ps1
+          if ($LASTEXITCODE -ne 0) { throw 'Package verification failed' }
+          $expected = @('PixelViewport.Core', 'PixelViewport.Imaging', 'PixelViewport.OpenCvSharp', 'PixelViewport.WinUI', 'PixelViewport.Avalonia')
+          foreach ($id in $expected) {
+            if (-not (Test-Path "artifacts/packages/$id.$env:RELEASE_VERSION.nupkg")) { throw "Expected package missing: $id.$env:RELEASE_VERSION" }
+          }
+      - name: Obtain short-lived NuGet publishing credential
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ vars.NUGET_USER }}
+      - name: Publish packages and symbols
+        shell: pwsh
+        env:
+          NUGET_TEMP_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
+        run: |
+          Get-ChildItem artifacts/packages/*.nupkg | ForEach-Object {
+            dotnet nuget push $_.FullName --api-key "$env:NUGET_TEMP_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
+            if ($LASTEXITCODE -ne 0) { throw "Publishing failed for $($_.Name)" }
+          }

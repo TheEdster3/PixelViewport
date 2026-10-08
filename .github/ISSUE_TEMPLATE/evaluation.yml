@@ -1,0 +1,40 @@
+name: Evaluation request
+description: Share non-confidential requirements for a scoped SDK evaluation
+title: "[Evaluation]: "
+labels: [evaluation]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **This issue is public.** Do not upload proprietary images, customer details, credentials, or confidential requirements. A dedicated private support channel is not configured yet. Commercial pilots require a separate agreed scope; submitting this form does not commit you to payment.
+  - type: textarea
+    id: workload
+    attributes:
+      label: Workload and integration goal
+      description: Generic application type, framework, OS, and the problem you need to solve. No confidential company or project details.
+    validations:
+      required: true
+  - type: input
+    id: format
+    attributes:
+      label: Format, size, and stride
+      placeholder: Gray16, 1920x1080, 3840 bytes per row
+    validations:
+      required: true
+  - type: input
+    id: performance
+    attributes:
+      label: Target frame rate and measurement boundary
+      placeholder: 30 FPS; application presentation age, excluding camera exposure
+  - type: textarea
+    id: criteria
+    attributes:
+      label: What would make an evaluation successful?
+      description: Integration effort, display correctness, responsiveness, queue policy, memory limits, and overlay needs.
+  - type: checkboxes
+    id: public
+    attributes:
+      label: Public information only
+      options:
+        - label: I understand this issue is public and have not included confidential or personal data.
+          required: true

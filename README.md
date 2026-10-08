@@ -2,6 +2,11 @@
 
 The vendor-neutral image display and interaction layer for .NET machine-vision, scientific-imaging, and inspection applications.
 
+[![Windows CI](https://github.com/TheEdster3/PixelViewport/actions/workflows/ci.yml/badge.svg)](https://github.com/TheEdster3/PixelViewport/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-5ae8bb)](LICENSE)
+
+[Website and interactive illustration](https://pixelviewport-vision.glassyloach1.chatgpt.site/) · [Alpha downloads](https://github.com/TheEdster3/PixelViewport/releases) · [Quickstart](docs/quickstart.md) · [Request an evaluation](https://github.com/TheEdster3/PixelViewport/issues/new?template=evaluation.yml)
+
 > **Status:** `0.2.0-alpha.1` foundation. WinUI is the verified Windows baseline. The new framework-neutral frame pipeline and Avalonia adapter are an evaluation-quality correctness path while production rendering is measured with real workloads.
 
 ## Why it exists
@@ -99,3 +104,10 @@ site/                              Static product site
 The packages in this repository are MIT licensed. PixelViewport Pro/private source remains separately licensed.
 
 Direct dependency versions and redistribution notes are recorded in [`docs/dependencies.md`](docs/dependencies.md).
+
+## Integration guides
+
+- [OpenCvSharp to Avalonia](https://pixelviewport-vision.glassyloach1.chatgpt.site/opencv.html): ownership transfer, safe copy, native runtime selection, and supported Mat types.
+- [Display and inspect 16-bit data](https://pixelviewport-vision.glassyloach1.chatgpt.site/gray16.html): little-endian buffers, stride, raw intensity, and today's high-byte display mapping.
+
+The website demo is a JavaScript illustration, not a .NET renderer benchmark. Public issues are not a private support channel; never upload confidential frames or credentials.

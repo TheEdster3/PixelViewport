@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Display and inspect Gray16 in Avalonia — PixelViewport guide</title><meta name="description" content="Wrap little-endian 16-bit image buffers, respect stride and ownership, and preserve raw intensity during Avalonia pixel inspection."><link rel="canonical" href="https://pixelviewport-vision.glassyloach1.chatgpt.site/gray16.html"><link rel="stylesheet" href="styles.css"><link rel="icon" href="favicon.svg" type="image/svg+xml"></head><body><header class="header"><a class="brand" href="index.html">▣ PixelViewport <span class="brand-vision">VISION</span></a><a href="index.html#developers">All guides</a></header><main class="article wrap"><div class="eyebrow">INTEGRATION GUIDE / 02 · WINDOWS ALPHA</div><h1>Sixteen-bit data.<br>Eight-bit display.<br>Keep the distinction.</h1><p>A displayed gray level is not the raw sensor value. PixelViewport's alpha keeps the original frame leased for inspection while creating a BGRA32 representation for the Avalonia bitmap.</p><h2>1. Describe the actual buffer</h2><p><code>Gray16LittleEndian</code> means an unpacked unsigned 16-bit intensity per pixel, stored low byte first. The stride is bytes per row—not pixels—and may include padding.</p><pre><code>using System.Buffers.Binary;
+using PixelViewport.Imaging;
+
+const int width = 640, height = 480;
+int stride = width * 2;
+byte[] pixels = new byte[stride * height];
+
+for (int y = 0; y &lt; height; y++)
+    for (int x = 0; x &lt; width; x++)
+        BinaryPrimitives.WriteUInt16LittleEndian(
+            pixels.AsSpan(y * stride + x * 2, 2),
+            (ushort)(x * 65535 / (width - 1)));
+
+var frame = PixelFrame.Wrap(
+    pixels, width, height, stride,
+    ImagePixelFormat.Gray16LittleEndian);
+
+viewport.SubmitFrame(frame);
+// Do not mutate pixels until PixelViewport releases the frame.</code></pre><p>This snippet goes inside your Avalonia application's setup or producer code with an existing <code>PixelViewport.Avalonia.ImageViewport</code>. For a running application shell, start from <a href="https://github.com/TheEdster3/PixelViewport/tree/main/samples/PixelViewport.VisionDemo">the VisionDemo sample</a>.</p><h2>2. Use a lease—or make a copy</h2><p>A camera SDK's buffer may be returned to a pool immediately after its callback. Passing that memory without retaining its lifetime is unsafe. Supply an appropriate <code>IDisposable</code> lease to <code>PixelFrame.Wrap</code>, or copy before the callback returns:</p><pre><code>var frame = PixelFrame.CopyFrom(
+    callbackBytes, width, height, stride,
+    ImagePixelFormat.Gray16LittleEndian,
+    sequence, DateTimeOffset.UtcNow);
+
+viewport.SubmitFrame(frame);</code></pre><p><code>callbackBytes</code>, dimensions, and sequence come from your acquisition code. Copying allocates an owned pooled buffer and decouples its lifetime from the camera callback. Wrapping a native pointer uses <code>PixelFrame.WrapUnmanaged</code> and has the same lifetime requirement.</p><h2>3. Inspect the original intensity</h2><pre><code>viewport.ImagePointerMoved += (_, e) =&gt;
+{
+    if (e.IsInsideImage &amp;&amp; e.Sample is { } sample)
+        System.Diagnostics.Debug.WriteLine(
+            $"Raw intensity: {sample.Intensity}; " +
+            $"bit depth: {sample.BitDepth}");
+};</code></pre><p>For Gray16, inspection returns values from 0 to 65535 with bit depth 16. Wheel zoom and pan change the screen transform, not the underlying pixel coordinate system.</p><h2>4. Understand today's display mapping</h2><p>The Community converter uses the high byte: <code>displayGray = rawIntensity &gt;&gt; 8</code>. An intensity of 32768 becomes a displayed gray value of 128. The original value remains available for inspection.</p><p>That linear full-range mapping is deliberately simple. A signal occupying only a narrow part of the 16-bit range may look nearly black. Adjustable window/level, calibrated measurement, richer LUTs, and packed camera formats are not implemented in this alpha.</p><div class="note"><p>The website's Gray16 playground is a synthetic JavaScript illustration. The published CPU conversion numbers come from the .NET probe; neither measures camera-to-screen latency.</p></div><h2>5. Measure before integrating into production</h2><p>Run the conversion probe on your target hardware, then evaluate the complete application's presentation age, drop behavior, UI responsiveness, and memory use with representative frames. Linux and production GPU rendering remain open work.</p><pre><code>dotnet run --project tools/PixelViewport.Benchmarks -c Release</code></pre><a class="button primary" href="https://github.com/TheEdster3/PixelViewport/blob/main/docs/performance.md">Read the measurement contract</a></main><footer class="footer wrap"><a href="opencv.html">OpenCvSharp integration guide</a><a href="privacy.html">Privacy</a><small>© 2026 PixelViewport contributors</small></footer></body></html>

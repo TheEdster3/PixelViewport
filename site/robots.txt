@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://pixelviewport-vision.glassyloach1.chatgpt.site/sitemap.xml
